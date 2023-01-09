@@ -157,3 +157,26 @@ The linker goes through two passes. In each pass, the entire object stream
 should be emitted to the linker, in the same order. During the first pass, all
 relocations will be computed. During the second pass, the linked hex stream will
 be output.
+
+Program Runner
+--------------
+
+The program runner is a simple C program that reads the linker as a hex stream
+and converts it into a 65C02 image, which is run using the JEMU65c02 emulator.
+
+Standard I/O Device
+-------------------
+
+The program runner creates a simple virtual device that it attaches to the 65C02
+emulator, which acts as a standard I/O interface. This device provides three
+registers: a latched read register, a latched write register, and a status
+register. Reads from the latched read register will perform a blocking read of
+standard input. Writes to the latched write register will perform a blocking
+write to standard output.  Reads from the status register will indicate whether
+the standard input stream has reached EOF. The Standard I/O device is attached
+at memory location `FFE0`, with the read register at `FFE0`, the write register
+at `FFE1`, and the status register at `FFE2`.
+
+The status register sets bit 0 to 1 if the last read was successful and to 0 if
+the last read was unsuccessful. This register should be checked after each read
+to detect an EOF or error condition.
