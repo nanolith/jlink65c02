@@ -29,7 +29,126 @@ stops the 65C02 processor (This works on WDC 65C02 or 65816 processors).
 Object Streams
 --------------
 
-TODO ADD
+Much can be done with an hex stream, but the downside is that absolute addresses
+must be precomputed and it's impossible to reuse functions between projects. An
+object stream provides some symbolic linkage to make it easier to deal with both
+address computation and function re-use.
+
+The first added feature is the `J` prefix. This is the "start obJect" prefix.
+When this prefix is encountered, the linker resets for the given object
+sequence. Globals are remembered between resets, but locals are not. Object
+sequences are kept in memory one at a time, and due to the limited memory in a
+65C02 processor, each object sequence must be kept short, on the order of a few
+kilobytes.
+
+The next added feature is the `OXXXX` prefix. This represents the origin for a
+given sequence. Typically, only one object in a stream will have this prefix. It
+works much like `AXXXX`, only this position is "sticky", meaning that future
+functions can be appended to this area. There is also the `DXXXX` prefix, which
+provides a "sticky" location for data. Sequences that don't care about where
+they are linked can use the `Q` prefix, which will cause the sequence to be
+appended somewhere after the origin, and the `E` prefix, which will cause the
+sequence to be appened somewhere after the last `D` prefix. Both the `O` and `D`
+prefixes are global, meaning that they stick around between object sequences.
+The very first object sequence in a stream should define both.
+
+Labels provide a means of locating a sequence in the object stream. There are
+two kinds of labels: global labels and local labels. A label starts with the `G`
+prefix or `L` prefix, followed by optional whitespace, and then the symbol name.
+A global label is saved in the label tree, however, all local labels are
+"forgotten" when the next start object sequence prefix is encountered.
+
+Labels can be referenced using the `RA` and `RR` prefixes. Both label references
+should include the symbol being referenced. The `RA` prefix emits an absolute
+address for the given symbol, and the `RR` prefix emits a signed 8-bit relative
+address for the given symbol. As such, `RR` prefixes are generally relegated to
+`L` labels in a given object sequence.
+
+Zero-page labels are used to reference zero-page addresses. They are denoted
+using the `ZXX` prefix, followed by optional whitespace and a symbolic name. The
+`RZ` prefix can be used to reference this zero-page label, at which point, the
+exact byte used to denote this zero-page reference will be emitted. Zero-page
+labels are global.
+
+The `Q` prefix should be used at the end of all object streams to note the end
+of a pass.
+
+Here is an example of an object stream consisting of a main program (with `O`
+and `D` prefixes) that calls a library function. The library function adds two
+32-bit numbers. This function is inefficient, but the point is to show what an
+object stream looks like.
+
+    J main
+    O0200
+    D2000
+    Z00 NUMA0               ; start of NUMA -- 32-bit number.
+    Z01 NUMA1
+    Z02 NUMA2
+    Z03 NUMA3
+    Z04 NUMB0               ; start of NUMB -- 32-bit number.
+    Z05 NUMB1
+    Z06 NUMB2
+    Z07 NUMB3
+    AFFFE                   ; The reset vector starts at main
+    RA main
+    G main                  ; main program starts at origin
+    Q     A901              ; LDA #01 -- make NUMA0 equal to 1
+    Q     B5                ; STA $NUMA0
+    RZ    NUMA0
+    Q     64                ; STZ $NUMA1
+    RZ    NUMA1
+    Q     64                ; STZ $NUMA2
+    RZ    NUMA2
+    Q     64                ; STZ $NUMA3
+    RZ    NUMA3
+    Q     A902              ; LDA #02 -- make NUMB0 equal to 2
+    Q     B5                ; STA $NUMB0
+    RZ    NUMB0
+    Q     64                ; STZ $NUMB1
+    RZ    NUMB1
+    Q     64                ; STZ $NUMB2
+    RZ    NUMB2
+    Q     64                ; STZ $NUMB3
+    RZ    NUMB3
+    Q     A9                ; LDA #NUMA0 -- NUMA0 is our first argument
+    RZ    NUMA0
+    Q     48                ; PHA
+    Q     A9                ; LDA #NUMB0 -- NUMB0 is our second argument
+    RZ    NUMB0
+    Q     48                ; PHA
+    Q     20                ; JSR add32
+    RA    add32
+    Q     DB                ; STP
+    RA add32
+    J add32                 ; start of add32 object
+    G add32                 ; add32 function starts here.
+    Q     D8                ; CLD -- treat this as a binary addition
+    Q     FA                ; PLY -- Y is set to our second argument
+    Q     B600              ; LDX $00,Y -- read the num B digit 0
+    Q     8A                ; TXA -- save it to A
+    Q     FA                ; PLX -- X is set to our first argument
+    Q     18                ; CLC -- at the start of addition, clear the carry.
+    Q     7500              ; ADC $00,X -- add num B and num A digit 0
+    Q     9500              ; STA $00,X -- save the result to num A digit 0
+    Q     DA                ; PHX -- save X
+    Q     B601              ; LDX $01,Y -- read num B digit 1
+    Q     8A                ; TXA -- save it to A
+    Q     FA                ; PLX -- restore X
+    Q     7501              ; ADC $01,X -- add num B and num A digit 1
+    Q     9501              ; STA $01,X -- save the result to num A digit 1
+    Q     DA                ; PHX -- save X
+    Q     B602              ; LDX $02,Y -- read num B digit 2
+    Q     8A                ; TXA -- save it to A
+    Q     FA                ; PLX -- restore X
+    Q     7502              ; ADC $02,X -- add num B and num A digit 2
+    Q     9502              ; STA $02,X -- save the result to num A digit 2
+    Q     DA                ; PHX -- save X
+    Q     B603              ; LDX $03,Y -- read num B digit 3
+    Q     8A                ; TXA -- save it to A
+    Q     FA                ; PLX -- restore X
+    Q     7503              ; ADC $03,X -- add num B and num A digit 3
+    Q     9503              ; STA $03,X -- save the result to num A digit 3
+    Q     60                ; RTS -- return from subroutine
 
 Passes
 ------
