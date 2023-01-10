@@ -17,6 +17,8 @@ JEMU_IMPORT_jemu65c02;
 static status mem_read(void* varr, uint16_t addr, uint8_t* val);
 static status mem_write(void* varr, uint16_t addr, uint8_t val);
 
+uint8_t flags_FFE2 = 0;
+
 /**
  * \brief Main entry point for jlink.
  *
@@ -40,7 +42,26 @@ int main(int argc, char* argv[])
     /* TODO - read linker program. */
     mem[0xFFFC] = 0x00;
     mem[0xFFFD] = 0x10;
-    mem[0x1000] = 0xDB;
+    mem[0x1000] = 0xA2; /* LDX #00 */
+    mem[0x1001] = 0x00;
+    mem[0x1002] = 0xBD; /* LDA $2000, X */
+    mem[0x1003] = 0x00;
+    mem[0x1004] = 0x20;
+    mem[0x1005] = 0xC9; /* CMP A, #00 */
+    mem[0x1006] = 0x00;
+    mem[0x1007] = 0xF0; /* BEQ #06 */
+    mem[0x1008] = 0x06;
+    mem[0x1009] = 0x8D; /* STA $FFE1 */
+    mem[0x100A] = 0xE1;
+    mem[0x100B] = 0xFF;
+    mem[0x100C] = 0xE8; /* INX */
+    mem[0x100D] = 0x80; /* BRA -13. */
+    mem[0x100E] = -13;
+    mem[0x100F] = 0xDB; /* STP */
+
+    /* string output by program. */
+    const char* hellostr = "Not yet implemented.\n";
+    strcpy((char*)(mem + 0x2000), hellostr);
 
     /* create the j65c02 instance. */
     retval =
@@ -101,9 +122,41 @@ int main(int argc, char* argv[])
  */
 static status mem_read(void* varr, uint16_t addr, uint8_t* val)
 {
+    int ch;
     const uint8_t* arr = (const uint8_t*)varr;
 
-    *val = arr[addr];
+    switch (addr)
+    {
+        case 0xFFE0:
+            /* read a character from standard input. */
+            ch = fgetc(stdin);
+
+            /* handle the status register. */
+            if (EOF == ch)
+            {
+                flags_FFE2 &= ~1;
+            }
+            else
+            {
+                flags_FFE2 |= 1;
+            }
+
+            /* write the low part of this value to the read value. */
+            *val = ch;
+            break;
+
+        case 0xFFE1:
+            *val = 0x00;
+            break;
+
+        case 0xFFE2:
+            *val = flags_FFE2;
+            break;
+
+        default:
+            *val = arr[addr];
+            break;
+    }
 
     return STATUS_SUCCESS;
 }
@@ -125,7 +178,20 @@ static status mem_write(void* varr, uint16_t addr, uint8_t val)
 {
     uint8_t* arr = (uint8_t*)varr;
 
-    arr[addr] = val;
+    switch (addr)
+    {
+        case 0xFFE0:
+        case 0xFFE2:
+            break;
+
+        case 0xFFE1:
+            fputc(val, stdout);
+            break;
+
+        default:
+            arr[addr] = val;
+            break;
+    }
 
     return STATUS_SUCCESS;
 }
