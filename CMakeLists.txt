@@ -32,8 +32,10 @@ AUX_SOURCE_DIRECTORY(src JLINK_SOURCES)
 
 ADD_EXECUTABLE(jlink65c02 ${JLINK_SOURCES})
 TARGET_COMPILE_OPTIONS(
-    jlink65c02 PRIVATE -O3 -Wall -Werror -Wextra -Wpedantic
+    jlink65c02 PRIVATE -O3 ${JEMU65C02_CFLAGS} -Wall -Werror -Wextra -Wpedantic
                      -Wno-unused-command-line-argument)
+TARGET_LINK_LIBRARIES(
+    jlink65c02 PRIVATE ${JEMU65C02_LDFLAGS})
 ADD_CUSTOM_TARGET(
     model_checks
     COMMAND make
