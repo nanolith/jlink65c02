@@ -5,6 +5,11 @@ The JEMU 65C02 Linker is a stream linker that takes hex object streams and links
 them into a hex stream over two passes. This linker is written in 65C02
 machine code and can be run using the JEMU65C02 emulator.
 
+The linker is actually written in the object stream format below. In order to
+link this object stream into a binary that can be run in a 65c02 emulator, a
+partial C implementation has also been written. This C implementation allows us
+to bootstrap the linker using a C compiler and the jemu65c02 emulator.
+
 Hex Streams
 -----------
 
