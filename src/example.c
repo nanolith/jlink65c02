@@ -7,6 +7,8 @@
  * distribution for the license terms under which this software is distributed.
  */
 
+#if 0
+
 #include <jemu65c02/jemu65c02.h>
 #include <stdio.h>
 #include <string.h>
@@ -195,3 +197,4 @@ static status mem_write(void* varr, uint16_t addr, uint8_t val)
 
     return STATUS_SUCCESS;
 }
+#endif
