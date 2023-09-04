@@ -21,7 +21,7 @@ comment, and all characters up to the next newline sequence are ignored. All
 whitespace is ignored, so that hex pairs can be whitespace delimited or may run
 together. Likewise, a comment may start in the middle of the line, after which
 point, all subsequent bytes until the next newline are ignored.  A line that
-starts with `Q` ends the hex sequence.
+starts with `X` ends the hex sequence.
 
 For example, the following hex sequence sets the A register to `27` hex and
 stops the 65C02 processor (This works on WDC 65C02 or 65816 processors).
@@ -29,7 +29,7 @@ stops the 65C02 processor (This works on WDC 65C02 or 65816 processors).
     A1000 A927              ; LDA #27
     +     DB                ; STP
     AFFFE 0010              ; 1000 is the reset vector
-    Q
+    X
 
 Object Streams
 --------------
@@ -75,7 +75,7 @@ using the `ZXX` prefix, followed by optional whitespace and a symbolic name. The
 exact byte used to denote this zero-page reference will be emitted. Zero-page
 labels are global.
 
-The `Q` prefix should be used at the end of all object streams to note the end
+The `X` command should be used at the end of all object streams to note the end
 of a pass.
 
 Here is an example of an object stream consisting of a main program (with `O`
