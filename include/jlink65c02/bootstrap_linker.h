@@ -13,7 +13,8 @@
 #include <memory>
 #include <string>
 
-namespace jlink65c02 {
+namespace jlink65c02
+{
     /** \brief Map of symbols to address. */
     typedef std::map<std::string, std::uint16_t> symbol_map;
     /** \brief Map of variable to zeropage offset. */
@@ -70,5 +71,40 @@ namespace jlink65c02 {
         /** \brief Decode a Z command from the first pass. */
         void decodeZCommand1(std::istream& in, std::ostream& log);
         void pass2(std::istream& in, std::ostream& log, std::ostream& out);
+        void decodeLine2(
+            char cmd, const std::string& args, bool& in_pass,
+            std::ostream& log, std::ostream& out);
+        /** \brief Decode an A command from the second pass. */
+        void decodeACommand2(
+            std::istream& in, std::ostream& log, std::ostream& out);
+        /** \brief Decode a D command from the second pass. */
+        void decodeDCommand2(
+            std::istream& in, std::ostream& log, std::ostream& out);
+        /** \brief Decode a G command from the second pass. */
+        void decodeGCommand2(
+            std::istream& in, std::ostream& log, std::ostream& out);
+        /** \brief Decode a J command from the second pass. */
+        void decodeJCommand2(
+            std::istream& in, std::ostream& log, std::ostream& out);
+        /** \brief Decode an L command from the second pass. */
+        void decodeLCommand2(
+            std::istream& in, std::ostream& log, std::ostream& out);
+        /** \brief Decode an O command from the second pass. */
+        void decodeOCommand2(
+            std::istream& in, std::ostream& log, std::ostream& out);
+        /** \brief Decode a + command from the second pass. */
+        void decodePlusCommand2(
+            std::istream& in, std::ostream& log, std::ostream& out);
+        /** \brief Decode a Q command from the second pass. */
+        void decodeQCommand2(
+            std::istream& in, std::ostream& log, std::ostream& out);
+        /** \brief Decode an R command from the second pass. */
+        void decodeRCommand2(
+            std::istream& in, std::ostream& log, std::ostream& out);
+        /** \brief Decode an X command from the second pass. */
+        void decodeXCommand2(std::istream& in, std::ostream& log);
+        /** \brief Decode a Z command from the second pass. */
+        void decodeZCommand2(
+            std::istream& in, std::ostream& log, std::ostream& out);
     };
 }
