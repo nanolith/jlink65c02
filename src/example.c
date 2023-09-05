@@ -1,17 +1,17 @@
 /**
- * \file src/main.c
+ * \file src/example.c
  *
- * \brief Main entry point for jlink utility.
+ * \brief Example file for jlink utility.
  *
  * \copyright 2023 Justin Handville.  Please see LICENSE.txt in this
  * distribution for the license terms under which this software is distributed.
  */
 
-#if 0
-
 #include <jemu65c02/jemu65c02.h>
 #include <stdio.h>
 #include <string.h>
+
+#if 0
 
 JEMU_IMPORT_jemu65c02;
 
