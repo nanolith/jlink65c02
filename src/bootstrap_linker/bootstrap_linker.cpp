@@ -1,5 +1,5 @@
 /**
- * \file src/bootstrap_linker/bootstrap_link.cpp
+ * \file src/bootstrap_linker/bootstrap_linker.cpp
  *
  * \brief Constructor for the bootstrap linker.
  *
