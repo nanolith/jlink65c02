@@ -24,7 +24,7 @@ void bootstrap_linker::decodeOCommand1(istream& in, ostream& log)
     text_address_set = true;
 
     auto logflags = log.flags();
-    log << "Set origin to " << hex << setw(4) << setfill('0') << text_address
-        << endl;
+    log << "Set origin to "
+        << uppercase << hex << setw(4) << setfill('0') << text_address << endl;
     log.flags(logflags);
 }

@@ -19,7 +19,9 @@ void bootstrap_linker::writeLine(std::ostream& out)
 
     if (writeAddress)
     {
-        out << "A" << hex << setw(4) << setfill('0') << deque_address << " ";
+        out << "A"
+            << uppercase << hex << setw(4) << setfill('0') << deque_address
+            << " ";
         writeAddress = false;
     }
     else
@@ -29,7 +31,8 @@ void bootstrap_linker::writeLine(std::ostream& out)
 
     for (size_t i = 0; i < 32 && !bytes.empty(); ++i)
     {
-        out << hex << setw(2) << setfill('0') << (int)bytes.front();
+        out << uppercase << hex << setw(2) << setfill('0')
+            << (int)bytes.front();
         bytes.pop_front();
         ++deque_address;
     }

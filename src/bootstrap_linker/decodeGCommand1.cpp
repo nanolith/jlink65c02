@@ -38,6 +38,7 @@ void bootstrap_linker::decodeGCommand1(istream& in, ostream& log)
 
     auto logflags = log.flags();
     log << "global symbol " << symbol << " defined at "
-        << hex << setw(4) << setfill('0') << text_address << "." << endl;
+        << uppercase << hex << setw(4) << setfill('0') << text_address << "."
+        << endl;
     log.flags(logflags);
 }

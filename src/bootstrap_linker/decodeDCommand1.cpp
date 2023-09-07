@@ -19,7 +19,7 @@ void bootstrap_linker::decodeDCommand1(istream& in, ostream& log)
     in >> hex >> data_address;
 
     auto logflags = log.flags();
-    log << "Set data offset to " << hex << setw(4) << setfill('0')
-        << data_address << endl;
+    log << "Set data offset to "
+        << uppercase << hex << setw(4) << setfill('0') << data_address << endl;
     log.flags(logflags);
 }

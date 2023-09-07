@@ -25,8 +25,9 @@ void bootstrap_linker::decodeZCommand1(istream& in, ostream& log)
 
     if (!!(zeropage_alloc[zeroref]))
     {
-        errorout << "zeropage reference " << hex << setw(2) << setfill('0')
-                 << zeroref << " already defined.";
+        errorout << "zeropage reference "
+                 << uppercase << hex << setw(2) << setfill('0') << zeroref
+                 << " already defined.";
         throw runtime_error(errorout.str());
     }
 
@@ -48,6 +49,7 @@ void bootstrap_linker::decodeZCommand1(istream& in, ostream& log)
 
     auto logflags = log.flags();
     log << "zeropage reference " << symbol << " defined at "
-        << hex << setw(2) << setfill('0') << zeroref << ".";
+        << uppercase << hex << setw(2) << setfill('0') << zeroref << "."
+        << endl;
     log.flags(logflags);
 }
