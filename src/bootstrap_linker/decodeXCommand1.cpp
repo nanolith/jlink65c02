@@ -17,5 +17,13 @@ void bootstrap_linker::decodeXCommand1(istream& in, ostream& log)
 {
     (void)in;
 
+    if ("" != objname)
+    {
+        log << "Caching locals for " << objname << "." << endl;
+        object_locals[objname] = make_shared<symbol_map>(local_symbols);
+    }
+
+    local_symbols.clear();
+
     log << "End of pass." << endl;
 }
