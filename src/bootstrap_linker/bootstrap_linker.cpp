@@ -18,5 +18,6 @@ bootstrap_linker::bootstrap_linker()
     , data_address(0x0000)
     , text_address_set(false)
     , in_absolute_address(false)
+    , writeAddress(false)
 {
 }
