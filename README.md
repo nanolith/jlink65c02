@@ -154,6 +154,15 @@ object stream looks like.
     Q     7503              ; ADC $03,X -- add num B and num A digit 3
     Q     9503              ; STA $03,X -- save the result to num A digit 3
     Q     60                ; RTS -- return from subroutine
+    X
+
+The output of this stream looks like this (remember to feed it to the linker
+twice):
+
+    AFFFE 0002
+    A0200 A901B500640164026403A902B504640564066407A90048A90448202002DB2002
+    +     D8FAB6008AFA1875009500DAB6018AFA75019501DAB6028AFA75029502DAB603
+    +     8AFA7503950360
 
 Passes
 ------
