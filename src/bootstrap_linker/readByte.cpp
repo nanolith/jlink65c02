@@ -17,6 +17,7 @@ using namespace std;
 bool bootstrap_linker::readByte(istream& in, bool& in_loop, uint8_t& byte)
 {
     char val1, val2;
+    unsigned int readVal;
 
     in >> val1;
 
@@ -43,7 +44,8 @@ bool bootstrap_linker::readByte(istream& in, bool& in_loop, uint8_t& byte)
         //decode byte
         char str[] = { val1, val2, '0' };
         stringstream sin(str);
-        sin >> hex >> byte;
+        sin >> hex >> readVal;
+        byte = readVal;
 
         return true;
     }
