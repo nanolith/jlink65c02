@@ -27,8 +27,9 @@ void bootstrap_linker::decodeACommand2(
     prev_text_address = curr_text_address;
 
     auto logflags = log.flags();
-    log << "Set current append address to " << hex << setw(4) << setfill('0')
-        << curr_text_address << endl;
+    log << "Set current append address to "
+        << uppercase << hex << setw(4) << setfill('0') << curr_text_address
+        << endl;
     log.flags(logflags);
 
     while (in.good() && in_loop)
@@ -44,7 +45,8 @@ void bootstrap_linker::decodeACommand2(
     {
         auto logflags = log.flags();
         log << "Incremented current append address to "
-            << hex << setw(4) << setfill('0') << curr_text_address << endl;
+            << uppercase << hex << setw(4) << setfill('0') << curr_text_address
+            << endl;
         log.flags(logflags);
     }
 
