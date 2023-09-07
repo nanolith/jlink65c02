@@ -31,7 +31,8 @@ void bootstrap_linker::decodeRCommand2(istream& in, ostream& log, ostream& out)
             absolute_address = lookupSymbol(symbol);
 
             log << "absolute reference for " << symbol << " is "
-                << setw(4) << setfill('0') << absolute_address << "." << endl;
+                << setw(4) << setfill('0') << hex << absolute_address
+                << "." << endl;
 
             bytes.push_back(absolute_address & 0x00FF);
             bytes.push_back(absolute_address >> 8);
@@ -46,8 +47,9 @@ void bootstrap_linker::decodeRCommand2(istream& in, ostream& log, ostream& out)
         case 'z':
             zeropage_address = lookupZeroPageSymbol(symbol);
 
-            log << "absolute reference for " << symbol << " is "
-                << setw(2) << setfill('0') << zeropage_address << "." << endl;
+            log << "zeropage reference for " << symbol << " is "
+                << setw(2) << setfill('0') << hex
+                << zeropage_address << "." << endl;
 
             bytes.push_back(zeropage_address);
 
