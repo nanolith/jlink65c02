@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <deque>
 #include <map>
 #include <memory>
 #include <string>
@@ -30,17 +31,22 @@ namespace jlink65c02
         zeropage_map zeropage;
         std::shared_ptr<std::string> zeropage_alloc[256];
         std::string objname;
+        std::deque<std::uint8_t> bytes;
+        std::uint16_t deque_address;
         std::uint16_t text_address;
         std::uint16_t curr_text_address;
         std::uint16_t data_address;
         bool text_address_set;
         bool in_absolute_address;
+        bool writeAddress;
 
         /** \brief default constructor. */
         bootstrap_linker();
 
         /** \brief Utility to read a byte from the input stream. */
         bool readByte(std::istream& in, bool& in_loop, std::uint8_t& byte);
+        void writeLine(std::ostream& out);
+        void setLineAddress(uint16_t address, std::ostream& out);
 
         /** \brief Perform the first linker pass using the input stream. */
         void pass1(std::istream& in, std::ostream& log);
