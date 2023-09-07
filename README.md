@@ -124,7 +124,6 @@ object stream looks like.
     Q     20                ; JSR add32
     RA    add32
     Q     DB                ; STP
-    RA add32
     J add32                 ; start of add32 object
     G add32                 ; add32 function starts here.
     Q     D8                ; CLD -- treat this as a binary addition
@@ -160,7 +159,7 @@ The output of this stream looks like this (remember to feed it to the linker
 twice):
 
     AFFFE 0002
-    A0200 A901B500640164026403A902B504640564066407A90048A90448202002DB2002
+    A0200 A901B500640164026403A902B504640564066407A90048A90448201E02DB1E02
     +     D8FAB6008AFA1875009500DAB6018AFA75019501DAB6028AFA75029502DAB603
     +     8AFA7503950360
 
