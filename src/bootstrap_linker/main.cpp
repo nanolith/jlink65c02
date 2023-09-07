@@ -31,6 +31,7 @@ int main(int argc, char* argv[])
     try
     {
         inst.pass1(cin, cerr);
+        inst.pass2(cin, cerr, cout);
     } catch (runtime_error& e)
     {
         cerr << "ERROR: " << e.what() << endl;
