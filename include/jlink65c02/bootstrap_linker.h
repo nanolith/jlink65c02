@@ -108,7 +108,8 @@ namespace jlink65c02
         void decodeRCommand2(
             std::istream& in, std::ostream& log, std::ostream& out);
         /** \brief Decode an X command from the second pass. */
-        void decodeXCommand2(std::istream& in, std::ostream& log);
+        void decodeXCommand2(
+            std::istream& in, std::ostream& log, std::ostream& out);
         /** \brief Decode a Z command from the second pass. */
         void decodeZCommand2(
             std::istream& in, std::ostream& log, std::ostream& out);
