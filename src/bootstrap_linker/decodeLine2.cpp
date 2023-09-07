@@ -30,7 +30,8 @@ void bootstrap_linker::decodeLine2(
         case 'O': case 'o': decodeOCommand2(sin, log, out); break;
         case 'Q': case 'q': decodeQCommand2(sin, log, out); break;
         case 'R': case 'r': decodeRCommand2(sin, log, out); break;
-        case 'X': case 'x': decodeXCommand2(sin, log); in_pass = false; break;
+        case 'X': case 'x':
+            decodeXCommand2(sin, log, out); in_pass = false; break;
         case 'Z': case 'z': decodeZCommand2(sin, log, out); break;
         case ';': log << "ignoring comment." << endl; break;
         default:
