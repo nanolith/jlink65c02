@@ -17,6 +17,4 @@ void bootstrap_linker::decodeDCommand2(istream& in, ostream& log, ostream& out)
     (void)in;
     (void)log;
     (void)out;
-
-    throw runtime_error("D command emit is not yet implemented.");
 }
