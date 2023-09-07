@@ -42,7 +42,7 @@ bool bootstrap_linker::readByte(istream& in, bool& in_loop, uint8_t& byte)
         }
 
         //decode byte
-        char str[] = { val1, val2, '0' };
+        char str[] = { val1, val2, 0 };
         stringstream sin(str);
         sin >> hex >> readVal;
         byte = readVal;
