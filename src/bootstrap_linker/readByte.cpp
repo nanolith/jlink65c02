@@ -49,8 +49,14 @@ bool bootstrap_linker::readByte(istream& in, bool& in_loop, uint8_t& byte)
 
         return true;
     }
+    else if (0 == val1)
+    {
+        return false;
+    }
     else
     {
-        throw runtime_error("invalid character sequence.");
+        stringstream errorout;
+        errorout << "invalid character sequence '" << val1 << "'.";
+        throw runtime_error(errorout.str());
     }
 }
