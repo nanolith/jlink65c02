@@ -18,11 +18,19 @@ void bootstrap_linker::decodeRCommand2(istream& in, ostream& log, ostream& out)
     char reference_type;
     string symbol;
     uint16_t absolute_address;
+    uint16_t addr;
     uint8_t zeropage_address;
+    int8_t relative_address;
     auto logflags = log.flags();
 
     in >> reference_type;
     in >> symbol;
+
+    // compute the current address.
+    if (in_absolute_address)
+        addr = curr_text_address;
+    else
+        addr = text_address;
 
     switch (reference_type)
     {
@@ -41,6 +49,21 @@ void bootstrap_linker::decodeRCommand2(istream& in, ostream& log, ostream& out)
                 curr_text_address += 2;
             else
                 text_address += 2;
+            break;
+
+        case 'R':
+        case 'r':
+            relative_address = lookupRelativeAddress(symbol, addr + 1);
+
+            log << "relative reference for " << symbol << " is "
+                << (int)relative_address << " bytes." << endl;
+
+            bytes.push_back(relative_address);
+
+            if (in_absolute_address)
+                curr_text_address += 1;
+            else
+                text_address += 1;
             break;
 
         case 'Z':
