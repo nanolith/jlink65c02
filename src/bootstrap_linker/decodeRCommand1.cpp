@@ -33,6 +33,15 @@ void bootstrap_linker::decodeRCommand1(istream& in, ostream& log)
                 text_address += 2;
             break;
 
+        case 'R':
+        case 'r':
+            log << "relative reference for " << symbol << "." << endl;
+            if (in_absolute_address)
+                curr_text_address += 1;
+            else
+                text_address += 1;
+            break;
+
         case 'Z':
         case 'z':
             log << "zeropage reference for " << symbol << "." << endl;

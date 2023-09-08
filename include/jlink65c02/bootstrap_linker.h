@@ -46,9 +46,11 @@ namespace jlink65c02
         /** \brief Utility to read a byte from the input stream. */
         bool readByte(std::istream& in, bool& in_loop, std::uint8_t& byte);
         void writeLine(std::ostream& out);
-        void setLineAddress(uint16_t address, std::ostream& out);
-        uint16_t lookupSymbol(const std::string& symbol);
-        uint8_t lookupZeroPageSymbol(const std::string& symbol);
+        void setLineAddress(std::uint16_t address, std::ostream& out);
+        std::uint16_t lookupSymbol(const std::string& symbol);
+        std::int8_t lookupRelativeAddress(
+            const std::string& symbol, std::uint16_t base_address);
+        std::uint8_t lookupZeroPageSymbol(const std::string& symbol);
 
         /** \brief Perform the first linker pass using the input stream. */
         void pass1(std::istream& in, std::ostream& log);
