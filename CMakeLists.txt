@@ -47,6 +47,17 @@ if (MODELCHECK_REQUIRED)
     ADD_DEPENDENCIES(jlink65c02 model_checks)
 endif()
 
-#Install library
-INSTALL(TARGETS jlink65c02
+#Build a pkg-config file
+SET(JLINK_PC "${CMAKE_BINARY_DIR}/jlink65c02.pc")
+FILE(WRITE  ${JLINK_PC} "Name: jlink65c02")
+FILE(APPEND ${JLINK_PC} "\nDescription: JEMU 65C02 Linker")
+FILE(APPEND ${JLINK_PC} "\nVersion: ${CMAKE_PROJECT_VERSION}")
+FILE(APPEND ${JLINK_PC} "\nURL: https://github.com/nanolith/jlink65c02")
+FILE(APPEND ${JLINK_PC} "\nprefix=${CMAKE_INSTALL_PREFIX}")
+FILE(APPEND ${JLINK_PC} "\nlibdir=\${prefix}/lib")
+FILE(APPEND ${JLINK_PC} "\nbindir=\${prefix}/bin")
+INSTALL(FILES ${JLINK_PC} DESTINATION lib/pkgconfig)
+
+#Install binaries
+INSTALL(TARGETS jlink65c02 jlink_bootstrap
         RUNTIME DESTINATION bin)
